@@ -1,0 +1,593 @@
+! Start detailed HVAC data definition
+
+
+
+Sizing:System,
+   Apt06L2,                                                                                            ! - Name of loop
+   Sensible,                                                                                           ! - Type of load to size on
+   autosize,                                                                                           ! - Design outdoor air flow rate (m3/s)
+   autosize,                                                                                           ! - Minimum sytem air flow ratio
+   5.00,                                                                                               ! - Preheat design temperature (C)
+   0.00800,                                                                                            ! - Preheat design humidity ratio (kg-H20/kg-air)
+   11.00,                                                                                              ! - Precool design temperature (C)
+   0.00800,                                                                                            ! - Precool design humidity ratio (kg-H20/kg-air)
+   12.00,                                                                                              ! - Central cooling design supply air temperature (C)
+   16.00,                                                                                              ! - Central heating design supply air temperature (C)
+   Noncoincident,                                                                                      ! - Sizing option
+   No,                                                                                                 ! - 100% outdoor air in cooling
+   No,                                                                                                 ! - 100% outdoor air in heating
+   0.00800,                                                                                            ! - Central cooling design supply air humidity ratio (kg-H20/kg-air)
+   0.00800,                                                                                            ! - Central heating design supply air humidity ratio (kg-H20/kg-air)
+   Designday,                                                                                          ! - Cooling design air flow method
+   ,                                                                                                   ! - Cooling design air flow rate (m3/s)
+   ,                                                                                                   ! - Supply air flow rate per floor area during cooling operation (m3/s-m2)
+   ,                                                                                                   ! - Fraction of auto-sized design cooling supply air flow rate
+   ,                                                                                                   ! - Design supply air flow rate per unit cooling capacity (m3/s-W)
+   Designday,                                                                                          ! - Heating design air flow method
+   ,                                                                                                   ! - Heating design air flow rate (m3/s)
+   ,                                                                                                   ! - Supply air flow rate per floor area during heating operation (m3/s-m2)
+   ,                                                                                                   ! - Fraction of auto-sized design heating supply air flow rate
+   ,                                                                                                   ! - Fraction of auto-sized design cooling supply air flow rate
+   ,                                                                                                   ! - Design supply air flow rate per unit heating capacity (m3/s-W)
+   ZoneSum,                                                                                            ! - System outdoor air method
+   1.0000,                                                                                             ! - Zone maximum outdoor air fraction
+   CoolingDesignCapacity,                                                                              ! - Cooling design capacity method
+   autosize,                                                                                           ! - Cooling design capacity (W)
+   ,                                                                                                   ! - Cooling design capacity per floor area (W/m2)
+   ,                                                                                                   ! - Fraction of auto-sized cooling capacity
+   HeatingDesignCapacity,                                                                              ! - Heating design capacity method
+   autosize,                                                                                           ! - Heating design capacity (W)
+   ,                                                                                                   ! - Heating design capacity per floor area (W/m2)
+   ,                                                                                                   ! - Fraction of auto-sized heating capacity
+   OnOff;                                                                                              ! - Central cooling capacity control method
+
+AirLoopHVAC,
+   Apt06L2,                                                                                            ! - Name of loop
+   ,                                                                                                   ! - Controller list name
+   Apt06L2 AvailabilityManager List,                                                                   ! - Availability manager list
+   0.0400,                                                                                             ! - Design supply air flow rate (m3/s)
+   Apt06L2 Branches,                                                                                   ! - Branch list
+   ,                                                                                                   ! - Connector list
+   Apt06L2 Supply Side Inlet,                                                                          ! - Supply side inlet node
+   Apt06L2 Demand Side Outlet,                                                                         ! - Demand side outlet node
+   Apt06L2 Demand Side Inlet List,                                                                     ! - Demand side inlet nodes
+   Apt06L2 Supply Side Outlet List;                                                                    ! - Supply side outlet nodes
+
+NodeList,
+   Apt06L2 Demand Side Inlet List,                                                                     ! - Demand side oulet nodes
+   Apt06L2 Demand Side Inlet 1;                                                                        ! - Demand side inlet node 1
+
+NodeList,
+   Apt06L2 Supply Side Outlet List,                                                                    ! - Supply side oulet nodes
+   Apt06L2 Supply Side Outlet 1;                                                                       ! - Supply side outlet node 1
+
+AirLoopHVAC:SupplyPath,
+   Apt06L2 Demand Side Supply Path 1,                                                                  ! - Name of supply path
+   Apt06L2 Demand Side Inlet 1,                                                                        ! - Name of supply path 1 inlet node,
+   AirLoopHVAC:ZoneSplitter,                                                                           ! - Component 1 object type
+   Apt06L2 Zone Splitter;                                                                              ! - Component 1 object name
+
+AirLoopHVAC:ZoneSplitter,
+   Apt06L2 Zone Splitter,                                                                              ! - Zone splitter name
+   Apt06L2 Demand Side Inlet 1,                                                                        ! - Inlet node name
+   Apt06L2 Zone Splitter Outlet Node 1,                                                                ! - Outlet node name
+   Apt06L2 Zone Splitter Outlet Node 2,                                                                ! - Outlet node name
+   Apt06L2 Zone Splitter Outlet Node 3;                                                                ! - Outlet node name
+
+AirLoopHVAC:ReturnPath,
+   Apt06L2 Demand Side Return Path,                                                                    ! - Name of return path
+   Apt06L2 Demand Side Outlet,                                                                         ! - Name of return path outlet node
+   AirLoopHVAC:ReturnPlenum,                                                                           ! - Component 1 object type
+   Apt06L2 Return Plenum;                                                                              ! - Component 1 object name
+
+AirLoopHVAC:ReturnPlenum,
+   Apt06L2 Return Plenum,                                                                              ! - Return plenum name
+   Apt06L2:Bathroom,                                                                                   ! - Zone name
+   Apt06L2:Bathroom Zone Air Node,                                                                     ! - Zone Air Node Name
+   Apt06L2 Demand Side Outlet,                                                                         ! - Outlet node name
+   ,                                                                                                   ! - Induced air outlet node name
+   Apt06L2 Return Plenum Inlet Node 1,                                                                 ! - Inlet node name
+   Apt06L2 Return Plenum Inlet Node 2,                                                                 ! - Inlet node name
+   Apt06L2 Return Plenum Inlet Node 3;                                                                 ! - Inlet node name
+
+BranchList,
+   Apt06L2 Branches,                                                                                   ! - Name of branch list
+   Apt06L2 AHU Main Branch;                                                                            ! - Name of branch 1
+
+Branch,
+   Apt06L2 AHU Main Branch,                                                                            ! - Branch name
+   ,                                                                                                   ! - Pressure drop curve name
+   Fan:VariableVolume,                                                                                 ! - Component 1 object type
+   Apt06L2 AHU Extract Fan,                                                                            ! - Component 1 name
+   Apt06L2 Supply Side Inlet,                                                                          ! - Component 1 inlet node name
+   Apt06L2 AHU Extract Fan Air Outlet Node,                                                            ! - Component 1 outlet node name
+   AirLoopHVAC:OutdoorAirSystem,                                                                       ! - Component 2 object type
+   Apt06L2 AHU Outdoor air system,                                                                     ! - Component 2 name
+   Apt06L2 AHU Extract Fan Air Outlet Node,                                                            ! - Component 2 inlet node name
+   Apt06L2 AHU Mixed Air Outlet,                                                                       ! - Component 2 outlet node name
+   Fan:VariableVolume,                                                                                 ! - Component 3 object type
+   Apt06L2 AHU Supply Fan,                                                                             ! - Component 3 name
+   Apt06L2 AHU Mixed Air Outlet,                                                                       ! - Component 3 inlet node name
+   Apt06L2 Supply Side Outlet 1;                                                                       ! - Component 3 outlet node name
+
+Fan:VariableVolume,
+   Apt06L2 AHU Extract Fan,                                                                            ! - Component name
+   On 24/7,                                                                                            ! - Availability schedule
+   0.700000,                                                                                           ! - Fan efficiency
+   600.00,                                                                                             ! - Pressure rise (Pa)
+   0.040000,                                                                                           ! - Max flow rate (m3/s)
+   Fraction,                                                                                           ! - Minimum flow rate input method for fan power
+   0.7000,                                                                                             ! - Minimum flow fraction for fan power
+   0.028000,                                                                                           ! - Minimum air flow rate for fan power (m3/s)
+   0.900000,                                                                                           ! - Motor efficiency
+   1.00,                                                                                               ! - Motor in air stream fraction
+   0.0015302446,                                                                                       ! - Fan Coefficient 1
+   0.0052080574,                                                                                       ! - Fan Coefficient 2
+   1.1086242000,                                                                                       ! - Fan Coefficient 3
+   -0.1163556300,                                                                                      ! - Fan Coefficient 4
+   0.0000000000,                                                                                       ! - Fan Coefficient 5
+   Apt06L2 Supply Side Inlet,                                                                          ! - Air inlet node name
+   Apt06L2 AHU Extract Fan Air Outlet Node,                                                            ! - Air outlet node name
+   General;                                                                                            ! - End Use Sub-Category
+
+OutdoorAir:Nodelist,
+   Apt06L2 AHU Outdoor Air Inlet;                                                                      ! - Outside air node
+
+AirLoopHVAC:OutdoorAirSystem,
+   Apt06L2 AHU Outdoor air system,                                                                     ! - Outside air system name
+   Apt06L2 AHU Outdoor air Controller List,                                                            ! - Outside air system controller list
+   Apt06L2 AHU Outdoor air Equipment List,                                                             ! - Outside air system equipment list
+   ;                                                                                                   ! - Outside air system availability manager list
+
+AirLoopHVAC:ControllerList,
+   Apt06L2 AHU Outdoor air Controller List,                                                            ! - Outside air system controller list
+   Controller:OutdoorAir,                                                                              ! - Controller 1 object type
+   Apt06L2 AHU Outdoor Air Controller;                                                                 ! - Controller 1 name
+
+AirLoopHVAC:OutdoorAirSystem:EquipmentList,
+   Apt06L2 AHU Outdoor air Equipment List,                                                             ! - Outside air system equipment list
+   HeatExchanger:AirToAir:SensibleAndLatent,                                                           ! - Component 1 object type
+   Apt06L2 AHU Heat Recovery Device,                                                                   ! - Component 1 name
+   OutdoorAir:Mixer,                                                                                   ! - Component 2 object type
+   Apt06L2 AHU Outdoor Air Mixer;                                                                      ! - Component 2 name
+
+Controller:OutdoorAir,
+   Apt06L2 AHU Outdoor Air Controller,                                                                 ! - Controller name
+   Apt06L2 AHU Relief Air Outlet,                                                                      ! - Controller relief air outlet node
+   Apt06L2 AHU Extract Fan Air Outlet Node,                                                            ! - Controller return air node
+   Apt06L2 AHU Mixed Air Outlet,                                                                       ! - Controller mixed air node
+   Apt06L2 AHU Outdoor Air Inlet,                                                                      ! - Controller actuator node
+   0.028000,                                                                                           ! - Minimum outdoor air flow rate (m3/s)
+   0.040000,                                                                                           ! - Maximum outdoor air flow rate (m3/s)
+   DifferentialDryBulb,                                                                                ! - Economiser control type
+   ModulateFlow,                                                                                       ! - Economiser control action type
+   50.00,                                                                                              ! - Economiser maximum limit dry bulb temperature (C)
+   ,                                                                                                   ! - Economiser maximum limit enthalpy (J/kg)
+   ,                                                                                                   ! - Economiser maximum limit dew point temperature (C)
+   ,                                                                                                   ! - Electronic enthalpy limit curve name
+   12,                                                                                                 ! - Economiser minimum limit dry bulb temperature (C)
+   LockoutWithHeating,                                                                                 ! - Lockout type
+   FixedMinimum,                                                                                       ! - Minimum limit type
+   Min outdoor air schedule: Always 1.00,                                                              ! - Minimum outdoor air schedule
+   On 24/7,                                                                                            ! - Minimum fraction of outdoor air schedule
+   On 24/7,                                                                                            ! - Maximum fraction of outdoor air schedule
+   Apt06L2 AHU Mechanical Ventilation Controller,                                                      ! - Mechanical ventilation controller
+   ,                                                                                                   ! - Time of day economiser control schedule
+   No,                                                                                                 ! - High humidity control
+   ,                                                                                                   ! - Humidistat control zone name
+   1,                                                                                                  ! - High humidity outdoor air flow ratio
+   Yes,                                                                                                ! - Control high indoor humidity based on outdoor humidity ratio
+   BypassWhenOAFlowGreaterThanMinimum;                                                                 ! - Heat recovery by-pass control type
+
+OutdoorAir:Mixer,
+   Apt06L2 AHU Outdoor Air Mixer,                                                                      ! - Name of outdoor air mixer
+   Apt06L2 AHU Mixed Air Outlet,                                                                       ! - Mixed air node name
+   Apt06L2 AHU Heat Recovery Supply Outlet,                                                            ! - Outdoor air stream node
+   Apt06L2 AHU Relief Air Outlet,                                                                      ! - Relief air stream node
+   Apt06L2 AHU Extract Fan Air Outlet Node;                                                            ! - Return air stream node name
+
+HeatExchanger:AirToAir:SensibleAndLatent,
+   Apt06L2 AHU Heat Recovery Device,                                                                   ! - Name
+   On 24/7,                                                                                            ! - Availability schedule
+   autosize,                                                                                           ! - Nominal supply air flow rate (m3/s)
+   0.880,                                                                                              ! - Sensible effectiveness at 100% heating air flow
+   0.000,                                                                                              ! - Latent effectiveness at 100% heating air flow
+   0.880,                                                                                              ! - Sensible effectiveness at 75% heating air flow
+   0.000,                                                                                              ! - Latent effectiveness at 75% heating air flow
+   0.880,                                                                                              ! - Sensible effectiveness at 100% cooling air flow
+   0.000,                                                                                              ! - Latent effectiveness at 100% cooling air flow
+   0.880,                                                                                              ! - Sensible effectiveness at 75% cooling air flow
+   0.000,                                                                                              ! - Latent effectiveness at 75% cooling air flow
+   Apt06L2 AHU Outdoor Air Inlet,                                                                      ! - Heat recovery supply air inlet node name
+   Apt06L2 AHU Heat Recovery Supply Outlet,                                                            ! - Heat recovery supply air outlet node name
+   Apt06L2 AHU Relief Air Outlet,                                                                      ! - Heat recovery exhaust air inlet node name
+   Apt06L2 AHU Heat Recovery Relief Outlet,                                                            ! - Heat recovery exhaust air outlet node name
+   0.000,                                                                                              ! - Nominal electric power (W)
+   No,                                                                                                 ! - Supply air outlet temperature control
+   Plate,                                                                                              ! - Heat exchanger type
+   None,                                                                                               ! - Frost control type
+   1.70,                                                                                               ! - Threshold temperature
+   0.167,                                                                                              ! - Initial defrost time fraction
+   0.0240,                                                                                             ! - Rate of defrost time fraction increase
+   Yes;                                                                                                ! - Economiser lockout
+
+Controller:MechanicalVentilation,
+   Apt06L2 AHU Mechanical Ventilation Controller,                                                      ! - Controller name
+   On 24/7,                                                                                            ! - Availability schedule name
+   Yes,                                                                                                ! - Demand control ventilation
+   ZoneSum,                                                                                            ! - System outdoor air method
+   1.00,                                                                                               ! - Zone maximum outdoor air fraction
+   Apt06L2:Bed2,                                                                                       ! - Zone list name
+   Apt06L2:Bed2 Design Specification Outdoor Air Object,                                               ! - Design specification outdoor air object name
+   Apt06L2:Bed2 Design Specification Zone Air Distribution Object,                                     ! - Design specification zone air distribution object name
+   Apt06L2:Bed1,                                                                                       ! - Zone list name
+   Apt06L2:Bed1 Design Specification Outdoor Air Object,                                               ! - Design specification outdoor air object name
+   Apt06L2:Bed1 Design Specification Zone Air Distribution Object,                                     ! - Design specification zone air distribution object name
+   Apt06L2:LvgKtn,                                                                                     ! - Zone list name
+   Apt06L2:LvgKtn Design Specification Outdoor Air Object,                                             ! - Design specification outdoor air object name
+   Apt06L2:LvgKtn Design Specification Zone Air Distribution Object;                                   ! - Design specification zone air distribution object name
+
+Fan:VariableVolume,
+   Apt06L2 AHU Supply Fan,                                                                             ! - Component name
+   On 24/7,                                                                                            ! - Availability schedule
+   0.700000,                                                                                           ! - Fan efficiency
+   600.00,                                                                                             ! - Pressure rise (Pa)
+   0.040000,                                                                                           ! - Max flow rate (m3/s)
+   Fraction,                                                                                           ! - Minimum flow rate input method for fan power
+   0.7000,                                                                                             ! - Minimum flow fraction for fan power
+   0.028000,                                                                                           ! - Minimum air flow rate for fan power (m3/s)
+   0.900000,                                                                                           ! - Motor efficiency
+   1.00,                                                                                               ! - Motor in air stream fraction
+   0.0015302446,                                                                                       ! - Fan Coefficient 1
+   0.0052080574,                                                                                       ! - Fan Coefficient 2
+   1.1086242000,                                                                                       ! - Fan Coefficient 3
+   -0.1163556300,                                                                                      ! - Fan Coefficient 4
+   0.0000000000,                                                                                       ! - Fan Coefficient 5
+   Apt06L2 AHU Mixed Air Outlet,                                                                       ! - Air inlet node name
+   Apt06L2 Supply Side Outlet 1,                                                                       ! - Air outlet node name
+   General;                                                                                            ! - End Use Sub-Category
+
+ZoneControl:Thermostat,
+   Apt06L2:LvgKtn Thermostat,                                                                          ! - Name
+   Apt06L2:LvgKtn,                                                                                     ! - Zone name
+   Control type schedule: Always 4,                                                                    ! - Control type schedule name
+   ThermostatSetpoint:DualSetpoint,                                                                    ! - Dual SP control object type
+   Apt06L2:LvgKtn Dual SP;                                                                             ! - Dual SP control object name
+
+ThermostatSetpoint:DualSetpoint,
+   Apt06L2:LvgKtn Dual SP,                                                                             ! - Name
+   Heating set point schedule,                                                                         ! - Heating setpoint temperature schedule name
+   Cooling set point schedule 22C;                                                                     ! - Cooling setpoint temperature schedule name
+
+Sizing:Zone,
+   Apt06L2:LvgKtn,                                                                                     ! - Zone group name
+   SupplyAirTemperature,                                                                               ! - Zone cooling design supply air temperature input method
+   14.00,                                                                                              ! - Zone cooling design supply air temperature (C)
+   10.00,                                                                                              ! - Zone cooling design supply air temperature difference (deltaC)
+   SupplyAirTemperature,                                                                               ! - Zone heating design supply air temperature input method
+   50.00,                                                                                              ! - Zone heating design supply air temperature (C)
+   10.00,                                                                                              ! - Zone heating design supply air temperature difference (deltaC)
+   0.0090,                                                                                             ! - Zone cooling design supply air humidity ratio (kg-H2O/kg-air)
+   0.0040,                                                                                             ! - Zone heating design supply air humidity ratio (kg-H2O/kg-air)
+   Apt06L2:LvgKtn Design Specification Outdoor Air Object,                                             ! - Design specification outdoor air object name
+   1.25,                                                                                               ! - Zone heating sizing factor
+   1.15,                                                                                               ! - Zone cooling sizing factor
+   DesignDay,                                                                                          ! - Cooling design air flow method
+   0.000000,                                                                                           ! - Cooling design air flow rate (m3/s)
+   0.000760,                                                                                           ! - Cooling min air flow per zone floor area (m3/s-m2)
+   0.000000,                                                                                           ! - Cooling min air flow (m3/s)
+   0.00,                                                                                               ! - Cooling min air flow fraction
+   DesignDay,                                                                                          ! - Heating design air flow method
+   0.000000,                                                                                           ! - Heating design air flow rate (m3/s)
+   0.002030,                                                                                           ! - Heating max air flow per zone area (m3/s-m2)
+   0.141580,                                                                                           ! - Heating max air flow (m3/s)
+   0.30,                                                                                               ! - Heating max air flow fraction
+   Apt06L2:LvgKtn Design Specification Zone Air Distribution Object,                                   ! - Design specification zone air distribution object name
+   No,                                                                                                 ! - Account for dedicated outdoor air system
+   NeutralSupplyAir,                                                                                   ! - Dedicated outdoor air system control strategy
+   autosize,                                                                                           ! - Dedicated outdoor air low temperature setpoint for design
+   autosize;                                                                                           ! - Dedicated outdoor air high temperature setpoint for design
+
+DesignSpecification:OutdoorAir,
+   Apt06L2:LvgKtn Design Specification Outdoor Air Object,                                             ! - Name
+   Flow/Zone,                                                                                          ! - Outside air method
+   0.009440,                                                                                           ! - Outside air flow per person (m3/s)
+   0.000000,                                                                                           ! - Outside air flow per zone floor area (m3/s-m2)
+   0.020000,                                                                                           ! - Outside air flow per zone (m3/s)
+   0.000000,                                                                                           ! - Outdoor air flow air changes per hour
+   On 24/7;                                                                                            ! - Outdoor air flow rate fraction schedule
+
+DesignSpecification:ZoneAirDistribution,
+   Apt06L2:LvgKtn Design Specification Zone Air Distribution Object,                                   ! - Name
+   1.0000,                                                                                             ! - Zone air aistribution effectiveness in cooling mode
+   1.0000,                                                                                             ! - Zone air aistribution effectiveness in heating mode
+   ,                                                                                                   ! - Zone air distribution effectiveness schedule
+   0.0000;                                                                                             ! - Zone secondary recirculation fraction
+
+NodeList,
+   Apt06L2:LvgKtn Air Inlet Node List,                                                                 ! - Name of zone air inlet node list
+   Apt06L2:LvgKtn Single Duct VAV No Reheat Supply Outlet;                                             ! - Name of zone air inlet node
+
+ZoneHVAC:EquipmentConnections,
+   Apt06L2:LvgKtn,                                                                                     ! - Zone Name
+   Apt06L2:LvgKtn Equipment,                                                                           ! - Zone Conditioning Equipment List Name
+   Apt06L2:LvgKtn Air Inlet Node List,                                                                 ! - Zone Air Inlet Node or Nodelist Name
+   ,                                                                                                   ! - Zone Air Exhaust Node or Nodelist Name
+   Apt06L2:LvgKtn Zone Air Node,                                                                       ! - Zone Air Node Name
+   Apt06L2 Return Plenum Inlet Node 1;                                                                 ! - Zone Return Air Node Name
+
+ZoneHVAC:EquipmentList,
+   Apt06L2:LvgKtn Equipment,                                                                           ! - Name
+   SequentialLoad,                                                                                     ! - Load distribution scheme
+   ZoneHVAC:Baseboard:Convective:Electric,                                                             ! - Apt06L2:LvgKtn Equipment,
+   Apt06L2:LvgKtn Electric Convector,                                                                  ! - Zone equipment 1 name
+   2,                                                                                                  ! - Zone equipment 1 cooling sequence
+   2,                                                                                                  ! - Zone equipment 1 heating sequence
+   Cooling fraction schedule,                                                                          ! - Zone equipment 1 sequential cooling fraction schedule
+   Heating fraction schedule,                                                                          ! - Zone equipment 1 sequential heating fraction schedule
+   ZoneHVAC:AirDistributionUnit,                                                                       ! - Zone equipment 1 sequential heating fraction schedule
+   Apt06L2:LvgKtn Single Duct VAV No Reheat ADU,                                                       ! - Zone equipment 2 name
+   1,                                                                                                  ! - Zone equipment 2 cooling sequence
+   1,                                                                                                  ! - Zone equipment 2 heating sequence
+   Cooling fraction schedule,                                                                          ! - Zone equipment 2 sequential cooling fraction schedule
+   Heating fraction schedule;                                                                          ! - Zone equipment 2 sequential heating fraction schedule
+
+ZoneHVAC:Baseboard:Convective:Electric,
+   Apt06L2:LvgKtn Electric Convector,                                                                  ! - Component name
+   Off 24/7,                                                                                           ! - Availability schedule
+   HeatingDesignCapacity,                                                                              ! - Heating design capacity method
+   1000.000,                                                                                           ! - Heating design capacity (W)
+   ,                                                                                                   ! - Heating design capacity per floor area (W/m2)
+   ,                                                                                                   ! - Fraction of auto-sized heating design capacity
+   1;                                                                                                  ! - Efficiency
+
+ZoneHVAC:AirDistributionUnit,
+   Apt06L2:LvgKtn Single Duct VAV No Reheat ADU,                                                       ! - Air distribution unit name
+   Apt06L2:LvgKtn Single Duct VAV No Reheat Supply Outlet,                                             ! - Air distribution unit outlet node name
+   AirTerminal:SingleDuct:VAV:NoReheat,                                                                ! - Air terminal object type
+   Apt06L2:LvgKtn Single Duct VAV No Reheat,                                                           ! - Air terminal name
+   0.0,                                                                                                ! - Upstream nominal leakage fraction
+   0.0;                                                                                                ! - Downstream nominal leakage fraction
+
+AirTerminal:SingleDuct:VAV:NoReheat,
+   Apt06L2:LvgKtn Single Duct VAV No Reheat,                                                           ! - Component name
+   On 24/7,                                                                                            ! - Availability schedule
+   Apt06L2:LvgKtn Single Duct VAV No Reheat Supply Outlet,                                             ! - Damper outlet node
+   Apt06L2 Zone Splitter Outlet Node 3,                                                                ! - Damper inlet node
+   0.020000,                                                                                           ! - Maximum air flow rate (m3/s)
+   Constant,                                                                                           ! - Zone minimum air flow rate method
+   0.700,                                                                                              ! - Constant minimum air flow fraction
+   0.100000,                                                                                           ! - Fixed minimum air flow rate (m3/s)
+   Min supply air flow fraction schedule: Always 0.3,                                                  ! - Minimum air flow fraction schedule
+   ;                                                                                                   ! - Design specification outdoor air object name
+
+ZoneControl:Thermostat,
+   Apt06L2:Bed2 Thermostat,                                                                            ! - Name
+   Apt06L2:Bed2,                                                                                       ! - Zone name
+   Control type schedule: Always 4,                                                                    ! - Control type schedule name
+   ThermostatSetpoint:DualSetpoint,                                                                    ! - Dual SP control object type
+   Apt06L2:Bed2 Dual SP;                                                                               ! - Dual SP control object name
+
+ThermostatSetpoint:DualSetpoint,
+   Apt06L2:Bed2 Dual SP,                                                                               ! - Name
+   Heating set point schedule,                                                                         ! - Heating setpoint temperature schedule name
+   Cooling set point schedule 22C;                                                                     ! - Cooling setpoint temperature schedule name
+
+Sizing:Zone,
+   Apt06L2:Bed2,                                                                                       ! - Zone group name
+   SupplyAirTemperature,                                                                               ! - Zone cooling design supply air temperature input method
+   14.00,                                                                                              ! - Zone cooling design supply air temperature (C)
+   10.00,                                                                                              ! - Zone cooling design supply air temperature difference (deltaC)
+   SupplyAirTemperature,                                                                               ! - Zone heating design supply air temperature input method
+   50.00,                                                                                              ! - Zone heating design supply air temperature (C)
+   10.00,                                                                                              ! - Zone heating design supply air temperature difference (deltaC)
+   0.0090,                                                                                             ! - Zone cooling design supply air humidity ratio (kg-H2O/kg-air)
+   0.0040,                                                                                             ! - Zone heating design supply air humidity ratio (kg-H2O/kg-air)
+   Apt06L2:Bed2 Design Specification Outdoor Air Object,                                               ! - Design specification outdoor air object name
+   1.25,                                                                                               ! - Zone heating sizing factor
+   1.15,                                                                                               ! - Zone cooling sizing factor
+   DesignDay,                                                                                          ! - Cooling design air flow method
+   0.000000,                                                                                           ! - Cooling design air flow rate (m3/s)
+   0.000760,                                                                                           ! - Cooling min air flow per zone floor area (m3/s-m2)
+   0.000000,                                                                                           ! - Cooling min air flow (m3/s)
+   0.00,                                                                                               ! - Cooling min air flow fraction
+   DesignDay,                                                                                          ! - Heating design air flow method
+   0.000000,                                                                                           ! - Heating design air flow rate (m3/s)
+   0.002030,                                                                                           ! - Heating max air flow per zone area (m3/s-m2)
+   0.141580,                                                                                           ! - Heating max air flow (m3/s)
+   0.30,                                                                                               ! - Heating max air flow fraction
+   Apt06L2:Bed2 Design Specification Zone Air Distribution Object,                                     ! - Design specification zone air distribution object name
+   No,                                                                                                 ! - Account for dedicated outdoor air system
+   NeutralSupplyAir,                                                                                   ! - Dedicated outdoor air system control strategy
+   autosize,                                                                                           ! - Dedicated outdoor air low temperature setpoint for design
+   autosize;                                                                                           ! - Dedicated outdoor air high temperature setpoint for design
+
+DesignSpecification:OutdoorAir,
+   Apt06L2:Bed2 Design Specification Outdoor Air Object,                                               ! - Name
+   Flow/Zone,                                                                                          ! - Outside air method
+   0.009440,                                                                                           ! - Outside air flow per person (m3/s)
+   0.000000,                                                                                           ! - Outside air flow per zone floor area (m3/s-m2)
+   0.010000,                                                                                           ! - Outside air flow per zone (m3/s)
+   0.000000,                                                                                           ! - Outdoor air flow air changes per hour
+   On 24/7;                                                                                            ! - Outdoor air flow rate fraction schedule
+
+DesignSpecification:ZoneAirDistribution,
+   Apt06L2:Bed2 Design Specification Zone Air Distribution Object,                                     ! - Name
+   1.0000,                                                                                             ! - Zone air aistribution effectiveness in cooling mode
+   1.0000,                                                                                             ! - Zone air aistribution effectiveness in heating mode
+   ,                                                                                                   ! - Zone air distribution effectiveness schedule
+   0.0000;                                                                                             ! - Zone secondary recirculation fraction
+
+NodeList,
+   Apt06L2:Bed2 Air Inlet Node List,                                                                   ! - Name of zone air inlet node list
+   Apt06L2:Bed2 Single Duct VAV No Reheat Supply Outlet;                                               ! - Name of zone air inlet node
+
+ZoneHVAC:EquipmentConnections,
+   Apt06L2:Bed2,                                                                                       ! - Zone Name
+   Apt06L2:Bed2 Equipment,                                                                             ! - Zone Conditioning Equipment List Name
+   Apt06L2:Bed2 Air Inlet Node List,                                                                   ! - Zone Air Inlet Node or Nodelist Name
+   ,                                                                                                   ! - Zone Air Exhaust Node or Nodelist Name
+   Apt06L2:Bed2 Zone Air Node,                                                                         ! - Zone Air Node Name
+   Apt06L2 Return Plenum Inlet Node 2;                                                                 ! - Zone Return Air Node Name
+
+ZoneHVAC:EquipmentList,
+   Apt06L2:Bed2 Equipment,                                                                             ! - Name
+   SequentialLoad,                                                                                     ! - Load distribution scheme
+   ZoneHVAC:AirDistributionUnit,                                                                       ! - Apt06L2:Bed2 Equipment,
+   Apt06L2:Bed2 Single Duct VAV No Reheat ADU,                                                         ! - Zone equipment 1 name
+   1,                                                                                                  ! - Zone equipment 1 cooling sequence
+   1,                                                                                                  ! - Zone equipment 1 heating sequence
+   Cooling fraction schedule,                                                                          ! - Zone equipment 1 sequential cooling fraction schedule
+   Heating fraction schedule;                                                                          ! - Zone equipment 1 sequential heating fraction schedule
+
+ZoneHVAC:AirDistributionUnit,
+   Apt06L2:Bed2 Single Duct VAV No Reheat ADU,                                                         ! - Air distribution unit name
+   Apt06L2:Bed2 Single Duct VAV No Reheat Supply Outlet,                                               ! - Air distribution unit outlet node name
+   AirTerminal:SingleDuct:VAV:NoReheat,                                                                ! - Air terminal object type
+   Apt06L2:Bed2 Single Duct VAV No Reheat,                                                             ! - Air terminal name
+   0.0,                                                                                                ! - Upstream nominal leakage fraction
+   0.0;                                                                                                ! - Downstream nominal leakage fraction
+
+AirTerminal:SingleDuct:VAV:NoReheat,
+   Apt06L2:Bed2 Single Duct VAV No Reheat,                                                             ! - Component name
+   On 24/7,                                                                                            ! - Availability schedule
+   Apt06L2:Bed2 Single Duct VAV No Reheat Supply Outlet,                                               ! - Damper outlet node
+   Apt06L2 Zone Splitter Outlet Node 1,                                                                ! - Damper inlet node
+   0.010000,                                                                                           ! - Maximum air flow rate (m3/s)
+   Constant,                                                                                           ! - Zone minimum air flow rate method
+   0.700,                                                                                              ! - Constant minimum air flow fraction
+   0.100000,                                                                                           ! - Fixed minimum air flow rate (m3/s)
+   Min supply air flow fraction schedule: Always 0.3,                                                  ! - Minimum air flow fraction schedule
+   ;                                                                                                   ! - Design specification outdoor air object name
+
+ZoneControl:Thermostat,
+   Apt06L2:Bed1 Thermostat,                                                                            ! - Name
+   Apt06L2:Bed1,                                                                                       ! - Zone name
+   Control type schedule: Always 4,                                                                    ! - Control type schedule name
+   ThermostatSetpoint:DualSetpoint,                                                                    ! - Dual SP control object type
+   Apt06L2:Bed1 Dual SP;                                                                               ! - Dual SP control object name
+
+ThermostatSetpoint:DualSetpoint,
+   Apt06L2:Bed1 Dual SP,                                                                               ! - Name
+   Heating set point schedule,                                                                         ! - Heating setpoint temperature schedule name
+   Cooling set point schedule 22C;                                                                     ! - Cooling setpoint temperature schedule name
+
+Sizing:Zone,
+   Apt06L2:Bed1,                                                                                       ! - Zone group name
+   SupplyAirTemperature,                                                                               ! - Zone cooling design supply air temperature input method
+   14.00,                                                                                              ! - Zone cooling design supply air temperature (C)
+   10.00,                                                                                              ! - Zone cooling design supply air temperature difference (deltaC)
+   SupplyAirTemperature,                                                                               ! - Zone heating design supply air temperature input method
+   50.00,                                                                                              ! - Zone heating design supply air temperature (C)
+   10.00,                                                                                              ! - Zone heating design supply air temperature difference (deltaC)
+   0.0090,                                                                                             ! - Zone cooling design supply air humidity ratio (kg-H2O/kg-air)
+   0.0040,                                                                                             ! - Zone heating design supply air humidity ratio (kg-H2O/kg-air)
+   Apt06L2:Bed1 Design Specification Outdoor Air Object,                                               ! - Design specification outdoor air object name
+   1.25,                                                                                               ! - Zone heating sizing factor
+   1.15,                                                                                               ! - Zone cooling sizing factor
+   DesignDay,                                                                                          ! - Cooling design air flow method
+   0.000000,                                                                                           ! - Cooling design air flow rate (m3/s)
+   0.000760,                                                                                           ! - Cooling min air flow per zone floor area (m3/s-m2)
+   0.000000,                                                                                           ! - Cooling min air flow (m3/s)
+   0.00,                                                                                               ! - Cooling min air flow fraction
+   DesignDay,                                                                                          ! - Heating design air flow method
+   0.000000,                                                                                           ! - Heating design air flow rate (m3/s)
+   0.002030,                                                                                           ! - Heating max air flow per zone area (m3/s-m2)
+   0.141580,                                                                                           ! - Heating max air flow (m3/s)
+   0.30,                                                                                               ! - Heating max air flow fraction
+   Apt06L2:Bed1 Design Specification Zone Air Distribution Object,                                     ! - Design specification zone air distribution object name
+   No,                                                                                                 ! - Account for dedicated outdoor air system
+   NeutralSupplyAir,                                                                                   ! - Dedicated outdoor air system control strategy
+   autosize,                                                                                           ! - Dedicated outdoor air low temperature setpoint for design
+   autosize;                                                                                           ! - Dedicated outdoor air high temperature setpoint for design
+
+DesignSpecification:OutdoorAir,
+   Apt06L2:Bed1 Design Specification Outdoor Air Object,                                               ! - Name
+   Flow/Zone,                                                                                          ! - Outside air method
+   0.009440,                                                                                           ! - Outside air flow per person (m3/s)
+   0.000000,                                                                                           ! - Outside air flow per zone floor area (m3/s-m2)
+   0.010000,                                                                                           ! - Outside air flow per zone (m3/s)
+   0.000000,                                                                                           ! - Outdoor air flow air changes per hour
+   On 24/7;                                                                                            ! - Outdoor air flow rate fraction schedule
+
+DesignSpecification:ZoneAirDistribution,
+   Apt06L2:Bed1 Design Specification Zone Air Distribution Object,                                     ! - Name
+   1.0000,                                                                                             ! - Zone air aistribution effectiveness in cooling mode
+   1.0000,                                                                                             ! - Zone air aistribution effectiveness in heating mode
+   ,                                                                                                   ! - Zone air distribution effectiveness schedule
+   0.0000;                                                                                             ! - Zone secondary recirculation fraction
+
+NodeList,
+   Apt06L2:Bed1 Air Inlet Node List,                                                                   ! - Name of zone air inlet node list
+   Apt06L2:Bed1 Single Duct VAV No Reheat Supply Outlet;                                               ! - Name of zone air inlet node
+
+ZoneHVAC:EquipmentConnections,
+   Apt06L2:Bed1,                                                                                       ! - Zone Name
+   Apt06L2:Bed1 Equipment,                                                                             ! - Zone Conditioning Equipment List Name
+   Apt06L2:Bed1 Air Inlet Node List,                                                                   ! - Zone Air Inlet Node or Nodelist Name
+   ,                                                                                                   ! - Zone Air Exhaust Node or Nodelist Name
+   Apt06L2:Bed1 Zone Air Node,                                                                         ! - Zone Air Node Name
+   Apt06L2 Return Plenum Inlet Node 3;                                                                 ! - Zone Return Air Node Name
+
+ZoneHVAC:EquipmentList,
+   Apt06L2:Bed1 Equipment,                                                                             ! - Name
+   SequentialLoad,                                                                                     ! - Load distribution scheme
+   ZoneHVAC:AirDistributionUnit,                                                                       ! - Apt06L2:Bed1 Equipment,
+   Apt06L2:Bed1 Single Duct VAV No Reheat ADU,                                                         ! - Zone equipment 1 name
+   1,                                                                                                  ! - Zone equipment 1 cooling sequence
+   1,                                                                                                  ! - Zone equipment 1 heating sequence
+   Cooling fraction schedule,                                                                          ! - Zone equipment 1 sequential cooling fraction schedule
+   Heating fraction schedule;                                                                          ! - Zone equipment 1 sequential heating fraction schedule
+
+ZoneHVAC:AirDistributionUnit,
+   Apt06L2:Bed1 Single Duct VAV No Reheat ADU,                                                         ! - Air distribution unit name
+   Apt06L2:Bed1 Single Duct VAV No Reheat Supply Outlet,                                               ! - Air distribution unit outlet node name
+   AirTerminal:SingleDuct:VAV:NoReheat,                                                                ! - Air terminal object type
+   Apt06L2:Bed1 Single Duct VAV No Reheat,                                                             ! - Air terminal name
+   0.0,                                                                                                ! - Upstream nominal leakage fraction
+   0.0;                                                                                                ! - Downstream nominal leakage fraction
+
+AirTerminal:SingleDuct:VAV:NoReheat,
+   Apt06L2:Bed1 Single Duct VAV No Reheat,                                                             ! - Component name
+   On 24/7,                                                                                            ! - Availability schedule
+   Apt06L2:Bed1 Single Duct VAV No Reheat Supply Outlet,                                               ! - Damper outlet node
+   Apt06L2 Zone Splitter Outlet Node 2,                                                                ! - Damper inlet node
+   0.010000,                                                                                           ! - Maximum air flow rate (m3/s)
+   Constant,                                                                                           ! - Zone minimum air flow rate method
+   0.700,                                                                                              ! - Constant minimum air flow fraction
+   0.100000,                                                                                           ! - Fixed minimum air flow rate (m3/s)
+   Min supply air flow fraction schedule: Always 0.3,                                                  ! - Minimum air flow fraction schedule
+   ;                                                                                                   ! - Design specification outdoor air object name
+
+AvailabilityManagerAssignmentList,
+   Apt06L2 AvailabilityManager List,                                                                   ! - Availability manager list name
+   AvailabilityManager:Scheduled,                                                                      ! - Air loop availability manager type
+   Apt06L2 Availability;                                                                               ! - Air loop availability manager name
+
+AvailabilityManager:Scheduled,
+   Apt06L2 Availability,                                                                               ! - Air loop availability manager name
+   On 24/7;                                                                                            ! - Air loop availability manager schedule
+
+SetpointManager:SingleZone:Cooling,
+   Air Loop Setpoint Manager,                                                                          ! - Component name
+   Temperature,                                                                                        ! - Control variable
+   12.00,                                                                                              ! - Minimum supply air temperature (C)
+   12.00,                                                                                              ! - Maximum supply air temperature (C)
+   Apt06L2:LvgKtn,                                                                                     ! - Control zone
+   Apt06L2:LvgKtn Zone Air Node,                                                                       ! - Control zone air node
+   Apt06L2:LvgKtn Single Duct VAV No Reheat Supply Outlet,                                             ! - Control zone inlet air node
+   Air Loop Setpoint Manager Node List;                                                                ! - Setpoint node list
+
+NodeList,
+   Air Loop Setpoint Manager Node List,                                                                ! - Setpoint node list
+   Apt06L2 Supply Side Outlet 1;                                                                       ! - Setpoint node  1
+
+SetpointManager:MixedAir,
+   Apt06L2 AHU Outdoor air system Mixed Air Manager,                                                   ! - Name
+   Temperature,                                                                                        ! - Control variable
+   Apt06L2 Supply Side Outlet 1,                                                                       ! - Reference setpoint node name
+   Apt06L2 AHU Mixed Air Outlet,                                                                       ! - Fan inlet node name
+   Apt06L2 Supply Side Outlet 1,                                                                       ! - Fan outlet node name
+   Apt06L2 AHU Mixed Air Outlet;                                                                       ! - Mixed air node name
+
+! End detailed HVAC data definition
