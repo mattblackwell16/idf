@@ -1,0 +1,96 @@
+EnergyManagementSystem:Sensor,
+   Toa,
+   Environment,
+   Site Outdoor Air Drybulb Temperature;
+
+EnergyManagementSystem:Sensor,
+   Rho_oa,
+   Environment,
+   Site Outdoor Air Density;
+
+EnergyManagementSystem:Sensor,
+   TempApt06L2LvgKtn,
+   Apt06L2:LvgKtn,
+   Zone Mean Air Temperature;
+
+EnergyManagementSystem:Actuator,
+   LvgKtn_SA,
+   APT06L2:LVGKTN SINGLE DUCT CAV NO REHEAT,
+   AirTerminal:SingleDuct:ConstantVolume:NoReheat,
+   Mass Flow Rate;
+
+EnergyManagementSystem:Actuator,
+   Bed1_SA,
+   APT06L2:BED1 SINGLE DUCT CAV NO REHEAT,
+EnergyManagementSystem:Sensor,
+   Toa,
+   Environment,
+   Site Outdoor Air Drybulb Temperature;
+
+EnergyManagementSystem:Sensor,
+   Rho_oa,
+   Environment,
+   Site Outdoor Air Density;
+
+EnergyManagementSystem:Sensor,
+   Trm,
+   Apt06L2:LvgKtn,
+   Zone Mean Air Temperature;
+
+EnergyManagementSystem:Actuator,
+   LvgKtn_SA,
+   APT06L2:LVGKTN SINGLE DUCT CAV NO REHEAT,
+   AirTerminal:SingleDuct:ConstantVolume:NoReheat,
+   Mass Flow Rate;
+
+EnergyManagementSystem:Actuator,
+   Bed1_SA,
+   APT06L2:BED1 SINGLE DUCT CAV NO REHEAT,
+   AirTerminal:SingleDuct:ConstantVolume:NoReheat,
+   Mass Flow Rate;
+
+EnergyManagementSystem:Actuator,
+   Bed2_SA,
+   APT06L2:BED2 SINGLE DUCT CAV NO REHEAT,
+   AirTerminal:SingleDuct:ConstantVolume:NoReheat,
+   Mass Flow Rate;
+
+EnergyManagementSystem:Actuator,
+   OverrideHRAvailability, !- Name
+   HR Availability Schedule, ! This is the name of the schedule assigned to HR availability in the OA part of the airloop.
+   Schedule:Compact, !- Actuated Component Type
+   Schedule Value; !- Actuated Component Control Type
+
+EnergyManagementSystem:ProgramCallingManager,
+   Summer Boost Bypass,
+   BeginTimestepBeforePredictor,
+    CalcZoneAirMassFlowRate;
+
+! Notes:
+! 0.7*Max is the turndown rate relative to the boost max design airflow rate
+! it is equivalent to 1 divide by 1.3x where PHPP 'standard' rate is 1.3x to determine boost rate.
+! Control logic is summerbypass boost ON if Toa > 12C AND Trm > 22C AND Toa < Trm
+! Toa = outside air temp
+! Trm = Temp of room where control thermostat is located (in this case the living room)
+
+EnergyManagementSystem:Program,
+    CalcZoneAirMassFlowRate,
+    	IF (Toa > 12) && (Trm > 22) && (Trm > (Toa + 1.0)),
+		Set LvgKtn_SA = 0.02*Rho_oa, ! 0.020m3/s max design airflow to zone
+		Set Bed1_SA = 0.01*Rho_oa, ! 0.010m3/s max design airflow to zone
+		Set Bed2_SA = 0.01*Rho_oa, ! 0.010m3/s max design airflow to zone
+		Set OverrideHRAvailability = 0, ! Bypass HR
+	ELSE,
+    		Set LvgKtn_SA = 0.02*0.7*Rho_oa, !0.7*max is 'standard' airflow
+    		Set Bed1_SA = 0.01*0.7*Rho_oa, !0.7*max is 'standard' airflow
+    		Set Bed2_SA = 0.01*0.7*Rho_oa, !0.7*max is 'standard' airflow
+		Set OverrideHRAvailability = 1, ! Dont bypass HR
+	ENDIF;
+
+Output:Variable, *, Zone Mechanical Ventilation Mass Flow Rate, Hourly;
+Output:Variable, *, Zone Mechanical Ventilation Standard Density Volume Flow Rate, Hourly;
+Output:Variable, *, Zone Mechanical Ventilation Current Density Volume Flow Rate, Hourly;
+Output:Variable, *, Air System Outdoor Air Flow Fraction, Hourly;
+Output:Variable, *, Air System Outdoor Air Economizer Status, Hourly;
+Output:Variable, *, Air System Outdoor Air Heat Recovery Bypass Status, Hourly;
+Output:Variable, *, Air System Outdoor Air Mass Flow Rate, Hourly;
