@@ -1,3 +1,5 @@
+! README: Any use of the below EMS script is at the sole responsibility of the user. The user should understand EMS programming language and how to apply and customise this script to their mdoel (https://bigladdersoftware.com/epx/docs/9-4/ems-application-guide/index.html). No liability for erroneous use of this script is held by the creator.
+
 EnergyManagementSystem:Sensor,
    Toa,
    Environment,
