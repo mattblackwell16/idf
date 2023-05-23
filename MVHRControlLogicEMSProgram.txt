@@ -72,6 +72,7 @@ EnergyManagementSystem:ProgramCallingManager,
 ! Control logic is summerbypass boost ON if Toa > 12C AND Trm > 22C AND Toa < Trm
 ! Toa = outside air temp
 ! Trm = Temp of room where control thermostat is located (in this case the living room)
+! Rho_oa is used to convert volume flow rate to air mass flow rate needed for input into CAV no reheat ADU
 
 EnergyManagementSystem:Program,
     CalcZoneAirMassFlowRate,
